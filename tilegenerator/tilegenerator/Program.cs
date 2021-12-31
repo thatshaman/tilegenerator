@@ -90,13 +90,21 @@ namespace tilegenerator
             Graphics e = Graphics.FromImage(tile);
 
             Bitmap[] sources = new Bitmap[zoomlevels];
-            sources[zoomlevels - 1] = new Bitmap(input, true);
+
+            Bitmap sourceInput = new Bitmap(input, true);
+            int size = Math.Max(sourceInput.Width, sourceInput.Height);
+            sources[zoomlevels - 1] = new Bitmap(size, size);
+
+            Graphics q = Graphics.FromImage(sources[zoomlevels - 1]);
+            q.Clear(clearColor);
+            q.DrawImageUnscaled(sourceInput, new Point(0, 0));
+            q.Dispose();
 
             // Rescale
             for (int source = zoomlevels - 2; source > -1; source--)
             {
                 sources[source] = new Bitmap((int)Math.Ceiling((decimal)sources[source + 1].Width / 2), (int)Math.Ceiling((decimal)sources[source + 1].Height / 2));
-                Graphics q = Graphics.FromImage(sources[source]);
+                q = Graphics.FromImage(sources[source]);
                 q.DrawImage(sources[source + 1], 0, 0, sources[source].Width, sources[source].Height);
                 q.Dispose();
             }
@@ -104,12 +112,13 @@ namespace tilegenerator
             // Draw
             for (int z = zoomlevels - 1; z > -1; z--)
             {
-                int tilecountX = (int)Math.Ceiling((double)sources[z].Width / tilesize);
-                int tilecountY = (int)Math.Ceiling((double)sources[z].Height / tilesize);
 
-                for (int y = 0; y < tilecountY; y++)
+
+                int tilecount = (int)Math.Ceiling((double)sources[z].Width / tilesize);
+
+                for (int y = 0; y < tilecount; y++)
                 {
-                    for (int x = 0; x < tilecountX; x++)
+                    for (int x = 0; x < tilecount; x++)
                     {
                         e.Clear(clearColor);
                         e.DrawImageUnscaled(sources[z], new Point(x * -tilesize, y * -tilesize));
@@ -130,6 +139,7 @@ namespace tilegenerator
 
             // Cleanup
             for (int i = 0; i < sources.Length; i++) sources[i].Dispose();
+            sourceInput.Dispose();
             tile.Dispose();
             GC.Collect();
 

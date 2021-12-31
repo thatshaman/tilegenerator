@@ -8,6 +8,7 @@
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/thatshaman/tilegenerator</RepositoryUrl>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
