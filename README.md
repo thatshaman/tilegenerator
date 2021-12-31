@@ -17,5 +17,8 @@ Convert an image to [Leaflet](https://leafletjs.com/) compatible map tiles
       --version                        Show version information
       -?, -h, --help                   Show help and usage information
       
-## Limitations
-- Uses windows only system.drawing calls
+## Known issues
+
+- Windows only for now (uses very specific system.drawing calls)
+- Maximum input size is limited to roughly 32,767 pixels
+- Need to adjust the zoomlevel by hand for larger images
